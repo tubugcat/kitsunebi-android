@@ -12,11 +12,11 @@ class Constants {
             "settings": {
                 "vnext": [
                     {
-                        "address": "1.2.3.4",
-                        "port": 10086,
+                        "address": "192.168.10.13",
+                        "port": 32245,
                         "users": [
                             {
-                                "id": "0e8575fb-a71f-455b-877f-b74e19d3f495"
+                                "id": "9dbbda62-8873-40f8-ac55-431ce650a728"
                             }
                         ]
                     }

@@ -15,4 +15,5 @@
     <string name="disallowed_list">Disallowed list</string>
     <string name="sniffing">sniffing</string>
     <string name="inbound_tag">inbound_tag</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>

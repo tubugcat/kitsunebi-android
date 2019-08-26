@@ -193,7 +193,7 @@ open class SimpleVpnService : VpnService() {
                 return@thread
             }
 
-            val localDns = Preferences.getString(applicationContext, getString(R.string.local_dns), "223.5.5.5")
+            val localDns = Preferences.getString(applicationContext, getString(R.string.local_dns), "223.5.5.5") //默认为阿里的DNS地址
 
             val builder = Builder().setSession("Kitsunebi")
                     .setMtu(1500)
