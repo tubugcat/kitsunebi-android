@@ -46,19 +46,19 @@ class MainActivity : AppCompatActivity() {
                 "vpn_stopped" -> {
                     running = false
                     stopping = false
-                    fab.setImageResource(android.R.drawable.ic_media_play)
+                    start_stop.setBackgroundResource(R.drawable.power_button_nor)
 //                    mNotificationManager?.cancel(mNotificationId)
                 }
                 "vpn_started" -> {
                     running = true
                     starting = false
-                    fab.setImageResource(android.R.drawable.ic_media_pause)
+                    start_stop.setBackgroundResource(R.drawable.power_button_on)
 //                    startNotification()
                 }
                 "vpn_start_err" -> {
                     running = false
                     starting = false
-                    fab.setImageResource(android.R.drawable.ic_media_play)
+                    start_stop.setBackgroundResource(R.drawable.power_button_nor)
                     context?.let {
                         showAlert(it, "Start VPN service failed")
                     }
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 "vpn_start_err_dns" -> {
                     running = false
                     starting = false
-                    fab.setImageResource(android.R.drawable.ic_media_play)
+                    start_stop.setBackgroundResource(R.drawable.power_button_nor)
                     context?.let {
                         showAlert(it, "Start VPN service failed: Not configuring DNS right, must has at least 1 dns server and mustn't include \"localhost\"")
                     }
@@ -74,13 +74,13 @@ class MainActivity : AppCompatActivity() {
                 "vpn_start_err_config" -> {
                     running = false
                     starting = false
-                    fab.setImageResource(android.R.drawable.ic_media_play)
+                    start_stop.setBackgroundResource(R.drawable.power_button_nor)
                     context?.let {
                         showAlert(it, "Start VPN service failed: Invalid V2Ray config.")
                     }
                 }
                 "pong" -> {
-                    fab.setImageResource(android.R.drawable.ic_media_pause)
+                    start_stop.setBackgroundResource(R.drawable.power_button_on)
                     running = true
                     Preferences.putBool(applicationContext, getString(R.string.vpn_is_running), true)
                 }
@@ -89,12 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        configString = Preferences.getString(applicationContext, Constants.PREFERENCE_CONFIG_KEY, Constants.DEFAULT_CONFIG)
-        configString?.let {
-            formatJsonString(it).let {
-                configView.setText(it, TextView.BufferType.EDITABLE)
-            }
-        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,14 +113,11 @@ class MainActivity : AppCompatActivity() {
 
         updateUI()
 
-        configScroll.isSmoothScrollingEnabled = true
 
-        fab.setOnClickListener { view ->
+
+        start_stop.setOnClickListener { view ->
             if (!running && !starting) {
                 starting = true
-                fab.setImageResource(android.R.drawable.ic_media_ff)
-                configString = configView.text.toString()
-                Preferences.putString(applicationContext, Constants.Companion.PREFERENCE_CONFIG_KEY, configString)
                 val intent = VpnService.prepare(this)
                 if (intent != null) {
                     startActivityForResult(intent, 1)
@@ -154,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+//        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -169,20 +161,11 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.format_btn -> {
-                val prettyText = formatJsonString(configView.text.toString())
-                prettyText?.let {
-                    configView.setText(it, TextView.BufferType.EDITABLE)
-                }
+
                 return true
             }
             R.id.save_btn -> {
-                val config = configView.text.toString()
-                val prettyText = formatJsonString(config)
-                if (prettyText == null) {
-                    showAlert(this, "Invalid JSON")
-                    return true
-                }
-                Preferences.putString(applicationContext, Constants.PREFERENCE_CONFIG_KEY, prettyText)
+
                 return true
             }
             R.id.log_btn -> {
